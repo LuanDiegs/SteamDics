@@ -18,4 +18,8 @@ Once your Steam account is connected to Discord, the application runs in the bac
 8. If all inputs are correct, a confirmation message will display in the command prompt.
 ![image](https://github.com/user-attachments/assets/6e9b27b5-1e71-4191-a6d4-a6f13ccfe366)
 
+## Or... You can just use docker
+1. In the config.json file, update your tokens.
+2. In the directory of the project, run "docker build -t [name_do_you_want] .".
+3. After, you run "docker run [name_do_you_want]".
 <br><b>Note</b>: The default time to start fetching your games is set to 1739588400 (UNIX time), which is <b>Sat Feb 15 2025 03:00:00 GMT+0000</b>. To change this, go to config/config.json and update the "LastGameAdquiredTime" property with your desired UNIX timestamp.
