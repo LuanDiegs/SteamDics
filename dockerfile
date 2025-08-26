@@ -22,3 +22,9 @@ COPY ["DiscSteam/config/config.json", "/app/config/config.json"]
 
 # Defina o ponto de entrada
 ENTRYPOINT ["dotnet", "DiscSteam.dll"]
+
+# Variaveis
+ENV STEAM_KEY="" 
+ENV ACESS_TOKEN="" 
+ENV TOKEN_BOT="" 
+ENV NEW_GAMES_OF_FAMILY=0

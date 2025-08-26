@@ -50,13 +50,13 @@ namespace DiscSteam
 
             var lastGameTimeAdquired = configs.LastGameAdquiredTime;
             var teste = games.OrderByDescending(x => x.RtTimeAcquired);
-            var newGames = games.OrderByDescending(x => x.RtTimeAcquired).Where(x => x.RtTimeAcquired >= lastGameTimeAdquired).ToList();
+            var newGames = games.OrderBy(x => x.RtTimeAcquired).Where(x => x.RtTimeAcquired >= lastGameTimeAdquired).ToList();
             var imageHeaderOfGames = await GetHeaderImageAppdetails(newGames.Select(x => x.AppId).ToList());
 
             if (newGames.Any())
             {
                 // Set the current time +1 to not repeat the game
-                await configs.SetLastGameAdquiredTime(newGames.Select(x => x.RtTimeAcquired + 1).FirstOrDefault());
+                await configs.SetLastGameAdquiredTime(newGames.Select(x => x.RtTimeAcquired + 1).LastOrDefault());
                 foreach (var newGame in newGames)
                 {
                     // Transform UNIX in real time
@@ -103,16 +103,17 @@ namespace DiscSteam
 
             while (configs.Channels.NewGamesOfFamily == 0)
             {
-                Console.WriteLine("\nPlease insert the discord channel to send the notifications!");
+                //Console.WriteLine("\nPlease insert the discord channel to send the notifications!");
 
-                if (ulong.TryParse(Console.ReadLine(), out var id))
+                var newGamesOfFamilyEnviromentVariable = Environment.GetEnvironmentVariable("NEW_GAMES_OF_FAMILY");
+                if (ulong.TryParse(newGamesOfFamilyEnviromentVariable, out var id))
                 {
                     await configs.SetNewGamesOfFamilyChannelId(id);
                     await configs.ReadConfigs();
                 }
                 else
                 {
-                    Console.WriteLine("Please set a valid channel!");
+                    //Console.WriteLine("Please set a valid channel!");
                 }
             }
         }
@@ -129,7 +130,7 @@ namespace DiscSteam
                 }
                 catch
                 {
-                    Console.WriteLine("\nThe channel does not exist.");
+                    //Console.WriteLine("\nThe channel does not exist.");
                     await SetNewGamesOfFamily(configs, clearChannel: true);
                 }
             }
@@ -147,9 +148,10 @@ namespace DiscSteam
 
             while (string.IsNullOrEmpty(configs.TokenBot))
             {
-                Console.WriteLine("\nPlease insert your token bot to send the notifications!");
+                //Console.WriteLine("\nPlease insert your token bot to send the notifications!");
 
-                await configs.SetTokenBot(Console.ReadLine());
+                var tokenBotEnviromentVariable = Environment.GetEnvironmentVariable("TOKEN_BOT");
+                await configs.SetTokenBot(tokenBotEnviromentVariable);
                 await configs.ReadConfigs();
             }
         }
@@ -188,7 +190,7 @@ namespace DiscSteam
                 }
                 catch
                 {
-                    Console.WriteLine("\nFailed to authenticate the bot.");
+                    //Console.WriteLine("\nFailed to authenticate the bot.");
                     await SetTokenBot(configs, clearToken: true);
                 }
             }
@@ -204,9 +206,10 @@ namespace DiscSteam
 
             while (string.IsNullOrEmpty(configs.AcessToken))
             {
-                Console.WriteLine("\nPlease insert your token access to connect to the SteamAPI");
+                //Console.WriteLine("\nPlease insert your token access to connect to the SteamAPI");
 
-                await configs.SetAcessToken(Console.ReadLine());
+                var acessTokenEnviromentVariable = Environment.GetEnvironmentVariable("ACESS_TOKEN");
+                await configs.SetAcessToken(acessTokenEnviromentVariable);
                 await configs.ReadConfigs();
             }
         }
@@ -222,7 +225,7 @@ namespace DiscSteam
                 sharedLibrary = await discSteam.GetSharedLibraryApps();
                 if (sharedLibrary == null)
                 {
-                    Console.WriteLine("\nThe acess token is invalid or expired.");
+                    //Console.WriteLine("\nThe acess token is invalid or expired.");
                     await SetAcessToken(configs, clearToken: true);
                 }
             }
@@ -240,9 +243,10 @@ namespace DiscSteam
 
             while (string.IsNullOrEmpty(configs.SteamKey))
             {
-                Console.WriteLine("\nPlease insert your Steam key to connect to the Steam API");
+                //Console.WriteLine("\nPlease insert your Steam key to connect to the Steam API");
 
-                await configs.SetSteamKey(Console.ReadLine());
+                var steamKeyEnviromentVariable = Environment.GetEnvironmentVariable("STEAM_KEY");
+                await configs.SetSteamKey(steamKeyEnviromentVariable);
                 await configs.ReadConfigs();
             }
         }
@@ -258,7 +262,7 @@ namespace DiscSteam
                 ownersProfilesNewGames = await discSteam.GetSteamUserInfo(ownersIds);
                 if (ownersProfilesNewGames == null)
                 {
-                    Console.WriteLine("\nThe steam key is invalid or expired.");
+                    //Console.WriteLine("\nThe steam key is invalid or expired.");
                     await SetSteamKey(configs, clearToken: true);
                 }
             }
